@@ -4,19 +4,35 @@
     <meta charset="UTF-8">
     <title>Legacy Blade Prototype</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #1a1a1a; }
-        canvas { display: block; width: 100vw; height: 100vh; }
-        #ui { position: absolute; top: 20px; left: 20px; color: white; font-family: sans-serif; pointer-events: none; }
+        body { margin: 0; overflow: hidden; background-color: #000; }
+        #ui { position: absolute; top: 20px; right: 20px; color: #f4d03f; font-family: 'Arial', sans-serif; }
     </style>
+    <!-- استدعاء محرك Three.js الخفيف -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <div id="ui">
         <h1>Legacy Blade</h1>
-        <p>جاري تحميل الملحمة...</p>
+        <p>جاري تهيئة المحرك...</p>
     </div>
     <script>
-        // هنا سنضع سحرنا البرمجي لاحقاً
-        console.log("العملاق يستيقظ...");
+        // إعداد المشهد الأساسي
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        // دالة التحديث
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        console.log("المحرك يعمل بنجاح!");
     </script>
 </body>
 </html>
