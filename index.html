@@ -7,14 +7,13 @@
         body { margin: 0; overflow: hidden; background-color: #000; }
         #ui { position: absolute; top: 20px; right: 20px; color: #f4d03f; font-family: sans-serif; }
     </style>
-    <!-- تحميل مكتبة Three.js مع إضافات التحكم -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     <div id="ui">
         <h1>Legacy Blade</h1>
-        <p>استخدم الماوس للتحكم في الكاميرا</p>
+        <p>السيف الأسطوري قيد التشكيل...</p>
     </div>
     <script>
         const scene = new THREE.Scene();
@@ -25,21 +24,35 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // إضافة التحكم بالماوس
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-        const light = new THREE.DirectionalLight(0xffffff, 1);
+        // إضاءة أقوى للسيف
+        const light = new THREE.DirectionalLight(0xffffff, 1.5);
         light.position.set(5, 10, 5);
         scene.add(light);
         scene.add(new THREE.AmbientLight(0x404040));
 
-        const geometry = new THREE.PlaneGeometry(20, 20);
-        const material = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
-        const ground = new THREE.Mesh(geometry, material);
+        // الأرضية
+        const ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshLambertMaterial({ color: 0xD2B48C }));
         ground.rotation.x = -Math.PI / 2;
         scene.add(ground);
 
-        camera.position.set(5, 5, 5);
+        // تصميم "سيف" بسيط (مقبض + نصل)
+        const swordGroup = new THREE.Group();
+        
+        // النصل (Blade)
+        const blade = new THREE.Mesh(new THREE.BoxGeometry(0.2, 3, 0.1), new THREE.MeshPhongMaterial({ color: 0xc0c0c0 }));
+        blade.position.y = 1.5;
+        swordGroup.add(blade);
+        
+        // المقبض (Handle)
+        const handle = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.5, 0.3), new THREE.MeshPhongMaterial({ color: 0x4b2c20 }));
+        handle.position.y = -0.25;
+        swordGroup.add(handle);
+
+        scene.add(swordGroup);
+
+        camera.position.set(3, 3, 3);
         controls.update();
 
         function animate() {
