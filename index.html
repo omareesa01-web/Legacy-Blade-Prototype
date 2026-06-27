@@ -7,12 +7,14 @@
         body { margin: 0; overflow: hidden; background-color: #000; }
         #ui { position: absolute; top: 20px; right: 20px; color: #f4d03f; font-family: sans-serif; }
     </style>
+    <!-- تحميل مكتبة Three.js مع إضافات التحكم -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     <div id="ui">
         <h1>Legacy Blade</h1>
-        <p>جاري ضبط الإضاءة والعمق...</p>
+        <p>استخدم الماوس للتحكم في الكاميرا</p>
     </div>
     <script>
         const scene = new THREE.Scene();
@@ -23,30 +25,26 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // إضافة إضاءة (شمس)
+        // إضافة التحكم بالماوس
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(5, 10, 5);
         scene.add(light);
         scene.add(new THREE.AmbientLight(0x404040));
 
-        // أرضية محسنة (استخدمنا MeshLambertMaterial عشان تتفاعل مع الضوء)
         const geometry = new THREE.PlaneGeometry(20, 20);
         const material = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
         const ground = new THREE.Mesh(geometry, material);
         ground.rotation.x = -Math.PI / 2;
         scene.add(ground);
 
-        // مكعب يمثل موقع اللاعب
-        const box = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshLambertMaterial({ color: 0x8B4513 }));
-        box.position.y = 0.5;
-        scene.add(box);
-
         camera.position.set(5, 5, 5);
-        camera.lookAt(0, 0, 0);
+        controls.update();
 
         function animate() {
             requestAnimationFrame(animate);
-            box.rotation.y += 0.01; // دوران خفيف عشان تتأكد أن اللعبة شغالة
+            controls.update();
             renderer.render(scene, camera);
         }
         animate();
